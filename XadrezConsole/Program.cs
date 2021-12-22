@@ -1,4 +1,7 @@
 ﻿using XadrezConsole.Board;
+using XadrezConsole.Board.Enums;
+using XadrezConsole.Board.Exceptions;
+using XadrezConsole.Chess;
 
 namespace XadrezConsole
 {
@@ -6,11 +9,23 @@ namespace XadrezConsole
     { 
         static void Main(string[] args)
         {
-            var board = new Chessboard(8,8);
+            try
+            {
+                var board = new Chessboard(8, 8);
 
-            Screen.PrintBoard(board);
+                board.PlacePiece(new Rook(Color.Black, board), new Position(0, 0));
+                board.PlacePiece(new Rook(Color.Black, board), new Position(1, 3));
+                board.PlacePiece(new King(Color.Black, board), new Position(2, 4));
 
-            Console.ReadLine();
+                Screen.PrintBoard(board);
+
+                Console.ReadLine();
+            }
+            catch (BoardException e)
+            {
+                Console.WriteLine($"Board Error: {e.Message}");
+            }
+            
         }
     }
 }

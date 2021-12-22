@@ -10,7 +10,6 @@ namespace XadrezConsole
             {
                 for (int j = 0; j < board.Columns; j++)
                 {
-
                     if (board.Pieces[i, j] != null)
                         Console.Write($"{board.Pieces[i, j]} ");
                     else 
