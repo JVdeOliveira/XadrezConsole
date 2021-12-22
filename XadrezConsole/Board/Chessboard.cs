@@ -5,7 +5,7 @@
         public int Rows { get; set; }
         public int Columns { get; set; }
 
-        Piece[,] Pieces;
+        public Piece[,] Pieces { get; private set; }
 
         public Chessboard(int rows, int columns)
         {
