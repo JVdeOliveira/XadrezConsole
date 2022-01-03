@@ -7,6 +7,5 @@
         Red,
         Green,
         Blue,
-        Yellow,
     }
 }

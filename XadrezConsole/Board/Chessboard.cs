@@ -39,7 +39,7 @@ namespace XadrezConsole.Board
 
         bool ValidPosition(Position position)
         {
-            return position.Row < 0 || position.Row >= Rows || position.Column < 0 || position.Column >= Columns;
+            return position.Row >= 0 || position.Row < Rows || position.Column >= 0 || position.Column < Columns;
         }
 
         void ValidatePosition(Position position)
