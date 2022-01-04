@@ -1,10 +1,11 @@
-﻿using XadrezConsole.Board;
+﻿using XadrezConsole.board;
+using XadrezConsole.Chess;
 
 namespace XadrezConsole
 {
     internal class Screen
     {
-        public static void PrintBoard(Chessboard board)
+        public static void PrintBoard(Board board)
         {
             for (int i = 0; i < board.Rows; i++)
             {
@@ -31,7 +32,7 @@ namespace XadrezConsole
         {
             switch (piece.Color)
             {
-                case Board.Enums.Color.Black:
+                case board.Enums.Color.Black:
                     var aux = Console.ForegroundColor;
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.Write(piece);
@@ -41,6 +42,16 @@ namespace XadrezConsole
                     Console.Write(piece);
                     break;
             }
+        }
+
+        public static ChessPosition ReadChessPosition()
+        {
+            string position = Console.ReadLine();
+
+            char column = position[0];
+            int row = int.Parse(position[1] + "");
+
+            return new ChessPosition(column, row);
         }
     }
 }

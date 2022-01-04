@@ -1,11 +1,11 @@
-﻿using XadrezConsole.Board;
-using XadrezConsole.Board.Enums;
+﻿using XadrezConsole.board;
+using XadrezConsole.board.Enums;
 
 namespace XadrezConsole.Chess
 {
     internal class Queen : Piece
     {
-        public Queen(Color color, Chessboard board) : base(color, board)
+        public Queen(Color color, Board board) : base(color, board)
         {
         }
 

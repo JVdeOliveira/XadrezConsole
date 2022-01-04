@@ -1,15 +1,15 @@
-﻿using XadrezConsole.Board.Exceptions;
+﻿using XadrezConsole.board.Exceptions;
 
-namespace XadrezConsole.Board
+namespace XadrezConsole.board
 {
-    internal class Chessboard
+    internal class Board
     {
         public int Rows { get; set; }
         public int Columns { get; set; }
 
         public Piece[,] Pieces { get; private set; }
 
-        public Chessboard(int rows, int columns)
+        public Board(int rows, int columns)
         {
             Rows = rows;
             Columns = columns;
@@ -18,6 +18,7 @@ namespace XadrezConsole.Board
 
         public Piece GetPiece(Position position)
         {
+            Console.WriteLine(position);
             return Pieces[position.Row, position.Column];
         }
 
@@ -27,6 +28,18 @@ namespace XadrezConsole.Board
 
             Pieces[position.Row, position.Column] = piece;
             piece.Position = position;
+        }
+
+        public Piece RemovePiece(Position position)
+        {
+            if (GetPiece(position) == null) return null;
+
+            Piece piece = GetPiece(position);
+           
+            piece.Position = null;
+            Pieces[position.Row, position.Column] = null;
+
+            return piece;
         }
 
         #region Exceptions

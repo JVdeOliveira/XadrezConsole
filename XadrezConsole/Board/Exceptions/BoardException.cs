@@ -1,4 +1,4 @@
-﻿namespace XadrezConsole.Board.Exceptions
+﻿namespace XadrezConsole.board.Exceptions
 {
     internal class BoardException : ApplicationException
     {
