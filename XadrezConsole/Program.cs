@@ -14,26 +14,40 @@ namespace XadrezConsole
 
                 while (!chessMath.MatchFinished)
                 {
-                    Console.Clear();
+                    try
+                    {
+                        Console.Clear();
 
-                    Screen.PrintBoard(chessMath.Chessboard);
+                        Screen.PrintBoard(chessMath.Chessboard);
 
-                    Console.WriteLine();
+                        Console.WriteLine($"\nRound: {chessMath.Round}");
+                        Console.WriteLine($"Awaiting move: {chessMath.CurrentPlayer}");
 
-                    Console.Write("Origem: ");
-                    var origin = Screen.ReadChessPosition().ToPosition();
+                        Console.Write("\nOrigem: ");
+                        var origin = Screen.ReadChessPosition().ToPosition();
+                        chessMath.ValidOriginPosition(origin);
 
-                    Console.Clear();
+                        Console.Clear();
 
-                    bool[,] possibleMoves = chessMath.Chessboard.GetPiece(origin).PossibleMoves();
-                    Screen.PrintBoard(chessMath.Chessboard, possibleMoves);
+                        bool[,] possibleMoves = chessMath.Chessboard.GetPiece(origin).PossibleMoves();
+                        Screen.PrintBoard(chessMath.Chessboard, possibleMoves);
 
-                    Console.WriteLine();
-
-                    Console.Write("Destino: ");
-                    var destination = Screen.ReadChessPosition().ToPosition();
-
-                    chessMath.Movement(origin, destination);
+                        Console.Write("\nDestino: ");
+                        var destination = Screen.ReadChessPosition().ToPosition();
+                        chessMath.ValidDestination(origin, destination);
+                        
+                        chessMath.PerformMatch(origin, destination);
+                    }
+                    catch (BoardException e)
+                    {
+                        Console.WriteLine($"Board Error: {e.Message}");
+                        Console.ReadLine();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"Unexpected Error: {e.Message}");
+                        Console.ReadLine();
+                    }
                 }
             }
             catch (BoardException e)

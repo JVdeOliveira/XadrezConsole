@@ -27,6 +27,21 @@ namespace XadrezConsole.board
             return piece == null || piece.Color != Color;
         }
 
+        public bool CanMoveTo(Position position)
+        {
+            return PossibleMoves()[position.Row, position.Column];
+        }
+
+        public bool ExistPossibleMoves()
+        {
+            foreach (var movement in PossibleMoves())
+            {
+                if (movement) return true;
+            }
+
+            return false;
+        }
+
         public abstract bool[,] PossibleMoves();
     }
 }
