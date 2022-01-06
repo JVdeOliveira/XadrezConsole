@@ -18,7 +18,6 @@ namespace XadrezConsole.board
 
         public Piece GetPiece(Position position)
         {
-            Console.WriteLine(position);
             return Pieces[position.Row, position.Column];
         }
 
@@ -50,9 +49,9 @@ namespace XadrezConsole.board
             return GetPiece(position) != null;
         }
 
-        bool ValidPosition(Position position)
+        public bool ValidPosition(Position position)
         {
-            return position.Row >= 0 || position.Row < Rows || position.Column >= 0 || position.Column < Columns;
+            return position.Row >= 0 && position.Row < Rows && position.Column >= 0 && position.Column < Columns;
         }
 
         void ValidatePosition(Position position)

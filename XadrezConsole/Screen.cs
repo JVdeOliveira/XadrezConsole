@@ -13,35 +13,58 @@ namespace XadrezConsole
 
                 for (int j = 0; j < board.Columns; j++)
                 {
-                    if (board.Pieces[i, j] != null)
-                    {
-                        WritePiece(board.Pieces[i, j]);
-                        Console.Write(" ");
-                    }
-                    else 
-                        Console.Write("- ");
+                    WritePiece(board.Pieces[i, j]);
                 }
 
                 Console.WriteLine();
             }
+            Console.WriteLine("  a b c d e f g h");
+        }
+        public static void PrintBoard(Board board, bool[,] possibleMoves)
+        {
+            ConsoleColor defaultColor = Console.BackgroundColor;
+            ConsoleColor newColor = ConsoleColor.DarkGray;
 
+            for (int i = 0; i < board.Rows; i++)
+            {
+                Console.Write(8 - i + " ");
+
+                for (int j = 0; j < board.Columns; j++)
+                {
+                    if (possibleMoves[i, j]) Console.BackgroundColor = newColor;
+
+                    WritePiece(board.Pieces[i, j]);
+                    
+                    Console.BackgroundColor = defaultColor;
+                }
+
+                Console.WriteLine();
+            }
             Console.WriteLine("  a b c d e f g h");
         }
 
         static void WritePiece(Piece piece)
         {
-            switch (piece.Color)
+            if (piece != null)
             {
-                case board.Enums.Color.Black:
-                    var aux = Console.ForegroundColor;
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.Write(piece);
-                    Console.ForegroundColor = aux;
-                    break;
-                default:
-                    Console.Write(piece);
-                    break;
+                switch (piece.Color)
+                {
+                    case board.Enums.Color.Black:
+                        var defaultColor = Console.ForegroundColor;
+
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(piece);
+                        Console.ForegroundColor = defaultColor;
+                        break;
+                    default:
+                        Console.Write(piece);
+                        break;
+                }
+
+                Console.Write(" ");
             }
+            else
+                Console.Write("- ");
         }
 
         public static ChessPosition ReadChessPosition()

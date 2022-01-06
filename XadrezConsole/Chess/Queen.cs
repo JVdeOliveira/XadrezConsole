@@ -9,6 +9,139 @@ namespace XadrezConsole.Chess
         {
         }
 
+        public override bool[,] PossibleMoves()
+        {
+            bool[,] possibleMoves = new bool[Board.Rows, Board.Columns];
+
+            var position = new Position(0, 0);
+
+            position.SetPosition(Position.Row + 1, Position.Column);
+            if (Board.ValidPosition(position) && CanMove(position))
+                possibleMoves[position.Row, position.Column] = true;
+
+            position.SetPosition(Position.Row - 1, Position.Column);
+            if (Board.ValidPosition(position) && CanMove(position))
+                possibleMoves[position.Row, position.Column] = true;
+
+            position.SetPosition(Position.Row, Position.Column + 1);
+            if (Board.ValidPosition(position) && CanMove(position))
+                possibleMoves[position.Row, position.Column] = true;
+
+            position.SetPosition(Position.Row, Position.Column - 1);
+            if (Board.ValidPosition(position) && CanMove(position))
+                possibleMoves[position.Row, position.Column] = true;
+
+            position.SetPosition(Position.Row + 1, Position.Column + 1);
+            if (Board.ValidPosition(position) && CanMove(position))
+                possibleMoves[position.Row, position.Column] = true;
+
+            position.SetPosition(Position.Row - 1, Position.Column - 1);
+            if (Board.ValidPosition(position) && CanMove(position))
+                possibleMoves[position.Row, position.Column] = true;
+
+            position.SetPosition(Position.Row - 1, Position.Column + 1);
+            if (Board.ValidPosition(position) && CanMove(position))
+                possibleMoves[position.Row, position.Column] = true;
+
+            position.SetPosition(Position.Row + 1, Position.Column - 1);
+            if (Board.ValidPosition(position) && CanMove(position))
+                possibleMoves[position.Row, position.Column] = true;
+
+            position.SetPosition(Position.Row + 1, Position.Column + 1);
+            while (Board.ValidPosition(position) && CanMove(position))
+            {
+                possibleMoves[position.Row, position.Column] = true;
+
+                if (Board.GetPiece(position) != null && Board.GetPiece(position).Color != Color)
+                    break;
+
+                position.Row++;
+                position.Column++;
+            }
+
+            position.SetPosition(Position.Row - 1, Position.Column - 1);
+            while (Board.ValidPosition(position) && CanMove(position))
+            {
+                possibleMoves[position.Row, position.Column] = true;
+
+                if (Board.GetPiece(position) != null && Board.GetPiece(position).Color != Color)
+                    break;
+
+                position.Row--;
+                position.Column--;
+            }
+
+            position.SetPosition(Position.Row - 1, Position.Column + 1);
+            while (Board.ValidPosition(position) && CanMove(position))
+            {
+                possibleMoves[position.Row, position.Column] = true;
+
+                if (Board.GetPiece(position) != null && Board.GetPiece(position).Color != Color)
+                    break;
+
+                position.Row--;
+                position.Column++;
+            }
+
+            position.SetPosition(Position.Row + 1, Position.Column - 1);
+            while (Board.ValidPosition(position) && CanMove(position))
+            {
+                possibleMoves[position.Row, position.Column] = true;
+
+                if (Board.GetPiece(position) != null && Board.GetPiece(position).Color != Color)
+                    break;
+
+                position.Row++;
+                position.Column--;
+            }
+
+            position.SetPosition(Position.Row + 1, Position.Column);
+            while (Board.ValidPosition(position) && CanMove(position))
+            {
+                possibleMoves[position.Row, position.Column] = true;
+
+                if (Board.GetPiece(position) != null && Board.GetPiece(position).Color != Color)
+                    break;
+
+                position.Row++;
+            }
+
+            position.SetPosition(Position.Row - 1, Position.Column);
+            while (Board.ValidPosition(position) && CanMove(position))
+            {
+                possibleMoves[position.Row, position.Column] = true;
+
+                if (Board.GetPiece(position) != null && Board.GetPiece(position).Color != Color)
+                    break;
+
+                position.Row--;
+            }
+
+            position.SetPosition(Position.Row, Position.Column + 1);
+            while (Board.ValidPosition(position) && CanMove(position))
+            {
+                possibleMoves[position.Row, position.Column] = true;
+
+                if (Board.GetPiece(position) != null && Board.GetPiece(position).Color != Color)
+                    break;
+
+                position.Column++;
+            }
+
+            position.SetPosition(Position.Row, Position.Column - 1);
+            while (Board.ValidPosition(position) && CanMove(position))
+            {
+                possibleMoves[position.Row, position.Column] = true;
+
+                if (Board.GetPiece(position) != null && Board.GetPiece(position).Color != Color)
+                    break;
+
+                position.Column--;
+            }
+
+            return possibleMoves;
+        }
+
         public override string ToString()
         {
             return "Q";

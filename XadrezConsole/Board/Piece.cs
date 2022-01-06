@@ -19,5 +19,14 @@ namespace XadrezConsole.board
         {
             NumberMovements++;
         }
+
+        protected virtual bool CanMove(Position position)
+        {
+            Piece piece = Board.GetPiece(position);
+
+            return piece == null || piece.Color != Color;
+        }
+
+        public abstract bool[,] PossibleMoves();
     }
 }
