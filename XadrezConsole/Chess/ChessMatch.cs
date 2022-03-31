@@ -1,4 +1,5 @@
-﻿using XadrezConsole.board;
+﻿using System.Collections.Generic;
+using XadrezConsole.board;
 using XadrezConsole.board.Enums;
 using XadrezConsole.board.Exceptions;
 
@@ -11,12 +12,17 @@ namespace XadrezConsole.Chess
         public Color CurrentPlayer { get; private set; }
         public int Round { get; private set; }
         
+        HashSet<Piece> _pieces;
+        HashSet<Piece> _capturedPieces;
 
         public ChessMatch()
         {
             Chessboard = new Board(8, 8);
             CurrentPlayer = Color.White;
             Round = 1;
+            
+            _pieces = new HashSet<Piece>();
+            _capturedPieces = new HashSet<Piece>();
 
             PutPieces();
         }
@@ -29,6 +35,9 @@ namespace XadrezConsole.Chess
             Piece capturedPiece = Chessboard.RemovePiece(destination);
 
             Chessboard.PlacePiece(piece, destination);
+
+            if (capturedPiece != null)
+                _capturedPieces.Add(capturedPiece);
         }
 
         public void PerformMatch(Position origin, Position destination)
@@ -64,40 +73,74 @@ namespace XadrezConsole.Chess
             CurrentPlayer = CurrentPlayer == Color.White ? Color.Black : Color.White;
         }
 
-        void PutPieces()
+        public HashSet<Piece> CapturedPieces(Color playerColor)
         {
-            Chessboard.PlacePiece(new Rook(Color.Black, Chessboard), new Position(0, 0));
-            Chessboard.PlacePiece(new Rook(Color.Black, Chessboard), new Position(0, 7));
+            HashSet<Piece> aux = new HashSet<Piece>();
 
-            Chessboard.PlacePiece(new Knight(Color.Black, Chessboard), new Position(0, 1));
-            Chessboard.PlacePiece(new Knight(Color.Black, Chessboard), new Position(0, 6));
-
-            Chessboard.PlacePiece(new Bishop(Color.Black, Chessboard), new Position(0, 2));
-            Chessboard.PlacePiece(new Bishop(Color.Black, Chessboard), new Position(0, 5));
-
-            Chessboard.PlacePiece(new King(Color.Black, Chessboard), new Position(0, 3));
-            Chessboard.PlacePiece(new Queen(Color.Black, Chessboard), new Position(0, 4));
-
-            for (int i = 0; i < Chessboard.Columns; i++)
+            foreach(var piece in _capturedPieces)
             {
-                Chessboard.PlacePiece(new Pawn(Color.Black, Chessboard), new Position(1, i));
+                if (piece.Color == playerColor)
+                    aux.Add(piece);
             }
 
-            Chessboard.PlacePiece(new Rook(Color.White, Chessboard), new Position(7, 0));
-            Chessboard.PlacePiece(new Rook(Color.White, Chessboard), new Position(7, 7));
+            return aux;
+        }
 
-            Chessboard.PlacePiece(new Knight(Color.White, Chessboard), new Position(7, 1));
-            Chessboard.PlacePiece(new Knight(Color.White, Chessboard), new Position(7, 6));
+        public HashSet<Piece> PiecesInMatch(Color playerColor)
+        {
+            HashSet<Piece> aux = new HashSet<Piece>();
 
-            Chessboard.PlacePiece(new Bishop(Color.White, Chessboard), new Position(7, 2));
-            Chessboard.PlacePiece(new Bishop(Color.White, Chessboard), new Position(7, 5));
+            foreach (var piece in _capturedPieces)
+            {
+                if (piece.Color == playerColor)
+                    aux.Add(piece);
+            }
 
-            Chessboard.PlacePiece(new King(Color.White, Chessboard), new Position(7, 3));
-            Chessboard.PlacePiece(new Queen(Color.White, Chessboard), new Position(7, 4));
+            aux.ExceptWith(CapturedPieces(playerColor));
+
+            return aux;
+        }
+
+        void PutNewPiece(int row, int column, Piece piece)
+        {
+            Chessboard.PlacePiece(piece, new Position(row, column));
+            _pieces.Add(piece);
+        }
+
+        void PutPieces()
+        {
+            PutNewPiece(0, 0, new Rook(Color.Black, Chessboard));
+            PutNewPiece(0, 7, new Rook(Color.Black, Chessboard));
+
+            PutNewPiece(0, 1, new Knight(Color.Black, Chessboard));
+            PutNewPiece(0, 6, new Knight(Color.Black, Chessboard));
+
+            PutNewPiece(0, 2, new Bishop(Color.Black, Chessboard));
+            PutNewPiece(0, 5, new Bishop(Color.Black, Chessboard));
+
+            PutNewPiece(0, 3, new King(Color.Black, Chessboard));
+            PutNewPiece(0, 4, new Queen(Color.Black, Chessboard));
 
             for (int i = 0; i < Chessboard.Columns; i++)
             {
-                Chessboard.PlacePiece(new Pawn(Color.White, Chessboard), new Position(6, i));
+                PutNewPiece(1, i, new Pawn(Color.Black, Chessboard));
+            }
+
+            PutNewPiece(7, 0, new Rook(Color.White, Chessboard));
+            PutNewPiece(7, 7, new Rook(Color.White, Chessboard));
+
+            PutNewPiece(7, 1, new Knight(Color.White, Chessboard));
+            PutNewPiece(7, 6, new Knight(Color.White, Chessboard));
+
+            PutNewPiece(7, 2, new Bishop(Color.White, Chessboard));
+            PutNewPiece(7, 5, new Bishop(Color.White, Chessboard));
+
+            PutNewPiece(7, 3, new King(Color.White, Chessboard));
+            PutNewPiece(7, 4, new Queen(Color.White, Chessboard));
+
+            for (int i = 0; i < Chessboard.Columns; i++)
+            {
+                PutNewPiece(6, i, new Pawn(Color.White, Chessboard));
             }
         }
     }

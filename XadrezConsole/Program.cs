@@ -1,5 +1,4 @@
-﻿using XadrezConsole.board;
-using XadrezConsole.board.Exceptions;
+﻿using XadrezConsole.board.Exceptions;
 using XadrezConsole.Chess;
 
 namespace XadrezConsole
@@ -10,33 +9,30 @@ namespace XadrezConsole
         {
             try
             {
-                var chessMath = new ChessMatch();
+                var chessMatch = new ChessMatch();
 
-                while (!chessMath.MatchFinished)
+                while (!chessMatch.MatchFinished)
                 {
                     try
                     {
                         Console.Clear();
 
-                        Screen.PrintBoard(chessMath.Chessboard);
+                        Screen.PrintChessMatch(chessMatch);
 
-                        Console.WriteLine($"\nRound: {chessMath.Round}");
-                        Console.WriteLine($"Awaiting move: {chessMath.CurrentPlayer}");
-
-                        Console.Write("\nOrigem: ");
+                        Console.Write("\nOrigin: ");
                         var origin = Screen.ReadChessPosition().ToPosition();
-                        chessMath.ValidOriginPosition(origin);
+                        chessMatch.ValidOriginPosition(origin);
 
                         Console.Clear();
 
-                        bool[,] possibleMoves = chessMath.Chessboard.GetPiece(origin).PossibleMoves();
-                        Screen.PrintBoard(chessMath.Chessboard, possibleMoves);
+                        bool[,] possibleMoves = chessMatch.Chessboard.GetPiece(origin).PossibleMoves();
+                        Screen.PrintBoard(chessMatch.Chessboard, possibleMoves);
 
-                        Console.Write("\nDestino: ");
+                        Console.Write("\nDestination: ");
                         var destination = Screen.ReadChessPosition().ToPosition();
-                        chessMath.ValidDestination(origin, destination);
+                        chessMatch.ValidDestination(origin, destination);
                         
-                        chessMath.PerformMatch(origin, destination);
+                        chessMatch.PerformMatch(origin, destination);
                     }
                     catch (BoardException e)
                     {

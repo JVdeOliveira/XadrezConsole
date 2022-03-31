@@ -1,10 +1,51 @@
-﻿using XadrezConsole.board;
+﻿using System.Collections.Generic;
+using XadrezConsole.board;
+using XadrezConsole.board.Enums;
 using XadrezConsole.Chess;
 
 namespace XadrezConsole
 {
     internal class Screen
     {
+        public static void PrintChessMatch(ChessMatch chessMatch)
+        {
+            PrintBoard(chessMatch.Chessboard);
+            Console.WriteLine();
+
+            PrintCapturedPieces(chessMatch);
+            Console.WriteLine();
+
+            Console.WriteLine($"\nRound: {chessMatch.Round}");
+            Console.WriteLine($"Awaiting move: {chessMatch.CurrentPlayer}");
+        }
+
+        public static void PrintCapturedPieces(ChessMatch chessMatch)
+        {
+            ConsoleColor defaultColor = Console.ForegroundColor;
+
+            Console.WriteLine("Captured Pieces");
+
+            Console.Write("White ");
+            Console.ForegroundColor = ConsoleColor.White;
+            PrintPiecesSet(chessMatch.CapturedPieces(Color.White));
+            Console.ForegroundColor = defaultColor;
+
+            Console.Write("\nBlack ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            PrintPiecesSet(chessMatch.CapturedPieces(Color.Black));
+            Console.ForegroundColor = defaultColor;
+        }
+
+        public static void PrintPiecesSet(HashSet<Piece> pieces)
+        {
+            Console.Write("[");
+
+            foreach (Piece piece in pieces)
+                Console.Write(piece + " ");
+
+            Console.Write("]");
+        }
+
         public static void PrintBoard(Board board)
         {
             for (int i = 0; i < board.Rows; i++)
