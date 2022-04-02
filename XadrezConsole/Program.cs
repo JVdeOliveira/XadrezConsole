@@ -45,6 +45,10 @@ namespace XadrezConsole
                         Console.ReadLine();
                     }
                 }
+
+                Console.Clear();
+                Screen.PrintChessMatch(chessMatch);
+                Console.ReadLine();
             }
             catch (BoardException e)
             {
@@ -54,6 +58,6 @@ namespace XadrezConsole
             {
                 Console.WriteLine($"Unexpected Error: {e.Message}");
             }
-        }
+        } 
     }
 }

@@ -16,10 +16,19 @@ namespace XadrezConsole
             Console.WriteLine();
 
             Console.WriteLine($"\nRound: {chessMatch.Round}");
-            Console.WriteLine($"Awaiting move: {chessMatch.CurrentPlayer}");
 
-            if (chessMatch.Check)
-                Console.WriteLine("\nCHECK!");
+            if (!chessMatch.MatchFinished)
+            {
+                Console.WriteLine($"Awaiting move: {chessMatch.CurrentPlayer}");
+
+                if (chessMatch.Check)
+                    Console.WriteLine("\nCHECK!");
+            }
+            else
+            {
+                Console.WriteLine("\nCHECKMATE!");
+                Console.WriteLine($"Winner: {chessMatch.CurrentPlayer}");
+            }
         }
 
         public static void PrintCapturedPieces(ChessMatch chessMatch)

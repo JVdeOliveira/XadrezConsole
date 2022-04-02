@@ -70,6 +70,12 @@ namespace XadrezConsole.Chess
 
             Check = IsCheck(AdversaryColor(CurrentPlayer));
 
+            if (IsCheckmate(AdversaryColor(CurrentPlayer)))
+            {
+                MatchFinished = true;
+                return;
+            }
+            
             Round++;
             ChangePlayer();
         }
@@ -156,6 +162,36 @@ namespace XadrezConsole.Chess
             }
 
             return false;
+        }
+
+        public bool IsCheckmate(Color color)
+        {
+            if (!IsCheck(color)) return false;
+
+            foreach (Piece piece in PiecesInMatch(color))
+            {
+                bool[,] posibleMoves = piece.PossibleMoves();
+
+                for (int i = 0; i < Chessboard.Rows; i++)
+                {
+                    for (int j = 0; j < Chessboard.Columns; j++)
+                    {
+                        if (posibleMoves[i, j])
+                        {
+                            Position origin = piece.Position;
+                            Position destination = new Position(i, j);
+
+                            Piece capturedPiece = Movement(origin, destination);
+                            bool isCheck = IsCheck(color);
+                            UndoMove(origin, destination, capturedPiece);
+
+                            if (!isCheck) return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
         }
 
         void PutNewPiece(int row, int column, Piece piece)
