@@ -17,6 +17,9 @@ namespace XadrezConsole
 
             Console.WriteLine($"\nRound: {chessMatch.Round}");
             Console.WriteLine($"Awaiting move: {chessMatch.CurrentPlayer}");
+
+            if (chessMatch.Check)
+                Console.WriteLine("\nCHECK!");
         }
 
         public static void PrintCapturedPieces(ChessMatch chessMatch)

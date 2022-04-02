@@ -20,6 +20,11 @@ namespace XadrezConsole.board
             NumberMovements++;
         }
 
+        public void DecrementMovement()
+        {
+            NumberMovements--;
+        }
+
         protected virtual bool CanMove(Position position)
         {
             Piece piece = Board.GetPiece(position);

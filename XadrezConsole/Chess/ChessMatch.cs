@@ -11,7 +11,8 @@ namespace XadrezConsole.Chess
         public bool MatchFinished { get; private set; }
         public Color CurrentPlayer { get; private set; }
         public int Round { get; private set; }
-        
+        public bool Check { get; private set; }
+
         HashSet<Piece> _pieces;
         HashSet<Piece> _capturedPieces;
 
@@ -27,22 +28,47 @@ namespace XadrezConsole.Chess
             PutPieces();
         }
 
-        void Movement(Position origin, Position destination)
+        Piece Movement(Position origin, Position destination)
         {
             Piece piece = Chessboard.RemovePiece(origin);
             piece.IncrementMovement();
 
             Piece capturedPiece = Chessboard.RemovePiece(destination);
 
-            Chessboard.PlacePiece(piece, destination);
-
             if (capturedPiece != null)
                 _capturedPieces.Add(capturedPiece);
+
+            Chessboard.PlacePiece(piece, destination);
+
+            return capturedPiece;
+        }
+
+        void UndoMove(Position origin, Position destination, Piece capturedPiece)
+        {
+            Piece piece = Chessboard.RemovePiece(destination);
+            piece.DecrementMovement();
+
+            Chessboard.PlacePiece(piece, origin);
+
+            if (capturedPiece != null)
+            {
+                _capturedPieces.Remove(capturedPiece);
+                Chessboard.PlacePiece(capturedPiece, destination);
+            }
         }
 
         public void PerformMatch(Position origin, Position destination)
         {
-            Movement(origin, destination);
+            Piece capturedPiece = Movement(origin, destination);
+
+            if (IsCheck(CurrentPlayer))
+            {
+                UndoMove(origin, destination, capturedPiece);
+
+                throw new BoardException("You can't put yourself in check");
+            }
+
+            Check = IsCheck(AdversaryColor(CurrentPlayer));
 
             Round++;
             ChangePlayer();
@@ -77,7 +103,7 @@ namespace XadrezConsole.Chess
         {
             HashSet<Piece> aux = new HashSet<Piece>();
 
-            foreach(var piece in _capturedPieces)
+            foreach(Piece piece in _capturedPieces)
             {
                 if (piece.Color == playerColor)
                     aux.Add(piece);
@@ -90,7 +116,7 @@ namespace XadrezConsole.Chess
         {
             HashSet<Piece> aux = new HashSet<Piece>();
 
-            foreach (var piece in _capturedPieces)
+            foreach (Piece piece in _pieces)
             {
                 if (piece.Color == playerColor)
                     aux.Add(piece);
@@ -99,6 +125,37 @@ namespace XadrezConsole.Chess
             aux.ExceptWith(CapturedPieces(playerColor));
 
             return aux;
+        }
+        
+        Color AdversaryColor(Color color)
+        {
+            return color == Color.White ? Color.Black: Color.White;
+        }
+
+        Piece GetKing(Color color)
+        {
+            foreach (Piece piece in PiecesInMatch(color))
+            {
+                if (piece is King)
+                    return piece;
+            }
+
+            throw new BoardException($"There is no {color} king on the board");
+        }
+
+        public bool IsCheck(Color color)
+        {
+            Piece king = GetKing(color);
+
+            foreach (Piece piece in PiecesInMatch(AdversaryColor(color)))
+            {
+                bool[,] posibleMoves = piece.PossibleMoves(); 
+
+                if (posibleMoves[king.Position.Row, king.Position.Column])
+                    return true;
+            }
+
+            return false;
         }
 
         void PutNewPiece(int row, int column, Piece piece)
