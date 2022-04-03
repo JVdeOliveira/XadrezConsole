@@ -9,6 +9,13 @@ namespace XadrezConsole.Chess
         {
         }
 
+        bool EnemyExist(Position position)
+        {
+            Piece piece = Board.GetPiece(position);
+
+            return piece != null && piece.Color != Color;
+        }
+
         public override bool[,] PossibleMoves()
         {
             bool[,] possibleMoves = new bool[Board.Rows, Board.Columns];
@@ -16,38 +23,38 @@ namespace XadrezConsole.Chess
 
             if (Color == Color.Black)
             {
-                for (int i = 1; i <= 2; i++)
-                {
-                    position = new Position(Position.Row + i, Position.Column);
+                position = new Position(Position.Row + 1, Position.Column);
+                if (Board.ValidPosition(position) && CanMove(position) && !EnemyExist(position))
+                    possibleMoves[position.Row, position.Column] = true;
 
-                    if (Board.ValidPosition(position) && CanMove(position) && Board.GetPiece(position) == null)
-                        possibleMoves[position.Row, position.Column] = true;
-                }
+                position = new Position(Position.Row + 2, Position.Column);
+                if (Board.ValidPosition(position) && CanMove(position) && !EnemyExist(position) && NumberMovements == 0)
+                    possibleMoves[position.Row, position.Column] = true;
 
                 position = new Position(Position.Row + 1, Position.Column + 1);
-                if (Board.ValidPosition(position) && CanMove(position) && Board.GetPiece(position) != null)
+                if (Board.ValidPosition(position) && CanMove(position) && EnemyExist(position))
                     possibleMoves[position.Row, position.Column] = true;
 
                 position = new Position(Position.Row + 1, Position.Column - 1);
-                if (Board.ValidPosition(position) && CanMove(position) && Board.GetPiece(position) != null)
+                if (Board.ValidPosition(position) && CanMove(position) && EnemyExist(position))
                     possibleMoves[position.Row, position.Column] = true;
             }
             else
             {
-                for (int i = 2; i >= 0; i--)
-                {
-                    position = new Position(Position.Row - i, Position.Column);
+                position = new Position(Position.Row - 1, Position.Column);
+                if (Board.ValidPosition(position) && CanMove(position) && !EnemyExist(position))
+                    possibleMoves[position.Row, position.Column] = true;
 
-                    if (Board.ValidPosition(position) && CanMove(position) && Board.GetPiece(position) == null)
-                        possibleMoves[position.Row, position.Column] = true;
-                }
+                position = new Position(Position.Row - 2, Position.Column);
+                if (Board.ValidPosition(position) && CanMove(position) && !EnemyExist(position) && NumberMovements == 0)
+                    possibleMoves[position.Row, position.Column] = true;
 
                 position = new Position(Position.Row - 1, Position.Column + 1);
-                if (Board.ValidPosition(position) && CanMove(position) && Board.GetPiece(position) != null)
+                if (Board.ValidPosition(position) && CanMove(position) && EnemyExist(position))
                     possibleMoves[position.Row, position.Column] = true;
 
                 position = new Position(Position.Row - 1, Position.Column - 1);
-                if (Board.ValidPosition(position) && CanMove(position) && Board.GetPiece(position) != null)
+                if (Board.ValidPosition(position) && CanMove(position) && EnemyExist(position))
                     possibleMoves[position.Row, position.Column] = true;
             }
 
